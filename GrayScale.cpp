@@ -3,7 +3,6 @@
 using namespace std;
 
 
-//GrayScale
 
 void GrayScale(Image&image) {
     for ( int i=0 ; i < image.width ; i++){
