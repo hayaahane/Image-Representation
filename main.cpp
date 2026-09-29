@@ -22,11 +22,11 @@ void addFrame(Image&img, int frameType, int frameColor) {
     } else if (frameColor == 3) {
         R = 255, G = 0, B = 0;
     }
-    int FrameSize = 20;
+    int frameSize = 20;
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j< img.height; ++j) {
             if (frameType == 1) {
-                if (i < FrameSize || i >= img.width - FrameSize || j < FrameSize || j >= img.height - FrameSize) {
+                if (i < frameSize || i >= img.width - frameSize || j < frameSize || j >= img.height - frameSize) {
                     img(i, j, 0) = R;
                     img(i, j, 1) = G;
                     img(i, j, 2) = B;
@@ -44,11 +44,26 @@ void addFrame(Image&img, int frameType, int frameColor) {
     cout << "Frame added." << endl;
 }
 
+void resizeImage(Image& img, int newW, int newH) {
+    Image newImg(newW, newH);
+    float xScale = (float)img.width / newW;
+    float yScale = (float)img.height / newH;
+    for (int i = 0; i < newW; ++i) {
+        for (int j = 0; j < newH; ++j){
+            int old_i = i * xScale;
+            int old_j = j * yScale;
+            newImg(i, j, 0) = img(old_i, old_j, 0);
+            newImg(i, j, 1) = img(old_i, old_j, 1);
+            newImg(i, j, 2) = img(old_i, old_j, 2);
+        }
+    } img = newImg;
+}
+
 int main() {
     string filename;
     int choice;
     cout << "Welcome to Baby Photoshop" << endl;
-    cout << "pls enter image name to load: ";
+    cout << "please enter image name to load: ";
     cin >> filename;
 
     Image img(filename);
@@ -58,7 +73,8 @@ int main() {
     }
     cout << "Choose a filter:" << endl;
     cout << "1. Add Frame" << endl;
-    cout << "2. Exit" << endl;
+    cout << "2. Resize Image" << endl;
+    cout << "3. Exit" << endl;
     cout << "Your choice: ";
     cin >> choice;
 
@@ -81,7 +97,34 @@ int main() {
         cin >> newName;
         img.saveImage(newName);
         cout << "Image saved as " << newName << endl;
-    } else {
+    } else if (choice == 2) {
+        int newW=0, newH=0;
+        int resizeChoice;
+        cout << "Choose resize method: " << endl;
+        cout << "1. New dimensions (Width, Height)" << endl;
+        cout << "2. Ratio" << endl;
+        cout << "Your choice: ";
+        cin >> resizeChoice;
+        if (resizeChoice == 1) {
+            cout << "Enter new width: ";
+            cin >> newW;
+            cout << "Enter new height: ";
+            cin >> newH;
+        } else if (resizeChoice == 2) {
+            float ratio;
+            cout << "Enter ratio (e.g., 0.5 for half size, 2.0 for double size): ";
+            cin >> ratio;
+            newW = img.width * ratio;
+            newH = img.height * ratio;
+        }
+        resizeImage(img, newW, newH);
+        string newName;
+        cout << "Enter name to save the new image: ";
+        cin >> newName;
+        img.saveImage(newName);
+        cout << "Image saved as " << newName << endl;
+    } 
+    else {
         cout << "Exiting program." << endl;
     }
     return 0;
