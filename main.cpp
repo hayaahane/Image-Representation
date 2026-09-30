@@ -3,30 +3,30 @@
 using namespace std;
 
 //GrayScale
-void GrayScale(Image&image) {
-    for ( int i=0 ; i < image.width ; i++){
-        for (int j=0 ; j < image.height ; j++){
+void GrayScale(Image&img) {
+    for ( int i=0 ; i < img.width ; i++){
+        for (int j=0 ; j < img.height ; j++){
             unsigned int avg=0;
 
             for (int k=0 ; k < 3 ; k++){
-                avg+= image(i,j,k);
+                avg+= img(i,j,k);
             }
             avg /=3 ;
-            image.setPixel(i,j,0,avg);
-            image.setPixel(i,j,1,avg);
-            image.setPixel(i,j,2,avg);
+            img.setPixel(i,j,0,avg);
+            img.setPixel(i,j,1,avg);
+            img.setPixel(i,j,2,avg);
         }
     }
 }
 
 //flip
-void  HorizontalFlip (Image&image) {
-    for(int i=0 ; i < image.width/2 ; i++){
-        for(int j=0 ; j < image.height ; j++){
+void  HorizontalFlip (Image&img) {
+    for(int i=0 ; i < img.width/2 ; i++){
+        for(int j=0 ; j < img.height ; j++){
             for(int k=0 ; k < 3 ; k++){
-                unsigned char temp= image(i,j,k);
-                image(i,j,k) = image(image.width-i-1,j,k);
-                image(image.width-i-1,j,k)= temp;
+                unsigned char temp= img(i,j,k);
+                img(i,j,k) = img(img.width-i-1,j,k);
+                img(img.width-i-1,j,k)= temp;
 
 
             }
@@ -37,13 +37,13 @@ void  HorizontalFlip (Image&image) {
 }
 
 
-void VerticalFlip(Image&image){
-    for(int i=0 ; i < image.width ; i++){
-        for(int j=0 ; j < image.height/2 ; j++){
+void VerticalFlip(Image&img){
+    for(int i=0 ; i < img.width ; i++){
+        for(int j=0 ; j < img.height/2 ; j++){
             for(int k=0 ; k < 3 ; k++){
-                unsigned char temp = image(i,j,k);
-                image(i,j,k)= image(i,image.height-j-1,k);
-                image(i,image.height-j-1,k)= temp;
+                unsigned char temp = img(i,j,k);
+                img(i,j,k)= img(i,img.height-j-1,k);
+                img(i,img.height-j-1,k)= temp;
             }
         }
     }
