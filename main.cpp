@@ -82,6 +82,16 @@ void blurImage (Image& img, int blurSize){
     }
 }
 
+void infraredImage(Image& img){
+    for (int i=0; i < img.width; ++i){
+        for (int j=0; j < img.height; ++j){
+            img(i, j, 0) = 255;
+            img(i, j, 1) = 255 - img(i, j, 1);
+            img(i, j, 2) = 255 - img(i, j, 2);
+        }
+    }
+}
+
 int main() {
     string filename;
     int choice;
@@ -98,7 +108,8 @@ int main() {
     cout << "1. Add Frame" << endl;
     cout << "2. Resize Image" << endl;
     cout << "3. Blur Image" << endl;
-    cout << "4. Exit" << endl;
+    cout << "4. Infrared Image" << endl;
+    cout << "5. Exit" << endl;
     cout << "Your choice: ";
     cin >> choice;
 
@@ -155,6 +166,13 @@ int main() {
         else if (level == 2) {blurSize = 10;} 
         else { blurSize = 15;}
         blurImage(img, blurSize);
+        string newName;
+        cout << "Enter name to save the new image: ";
+        cin >> newName;
+        img.saveImage(newName);
+        cout << "Image saved as " << newName << endl;
+    } else if (choice == 4) {
+        infraredImage(img);
         string newName;
         cout << "Enter name to save the new image: ";
         cin >> newName;
