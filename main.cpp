@@ -1,7 +1,7 @@
 /*
 Assignment 1 - Part 1
 CS213 - object oriented programming
-Section: 
+Section: S11
 
 Team Members:
 1. Haneen Osama Reda          - 20250206    -filters (1, 5, 9, 13)
@@ -59,6 +59,29 @@ void resizeImage(Image& img, int newW, int newH) {
     } img = newImg;
 }
 
+void blurImage (Image& img, int blurSize){
+    Image temp = img;
+    for (int i=0; i < img.width; ++i){
+        for (int j=0; j < img.height; ++j){
+            for (int k=0; k<3; ++k){
+                int sum = 0;
+                int count =0;
+                for (int x = -blurSize; x <= blurSize; ++x){
+                    for (int y = -blurSize; y <= blurSize; ++y){
+                        int aroundI = i + x;
+                        int aroundJ = j + y;
+                        if (aroundI >= 0 && aroundI < img.width && aroundJ >= 0 && aroundJ < img.height){
+                            sum += temp(aroundI, aroundJ, k);
+                            count++;
+                        }
+                    }
+                }
+                img(i, j, k) = sum / count;
+            }
+        }
+    }
+}
+
 int main() {
     string filename;
     int choice;
@@ -74,7 +97,8 @@ int main() {
     cout << "Choose a filter:" << endl;
     cout << "1. Add Frame" << endl;
     cout << "2. Resize Image" << endl;
-    cout << "3. Exit" << endl;
+    cout << "3. Blur Image" << endl;
+    cout << "4. Exit" << endl;
     cout << "Your choice: ";
     cin >> choice;
 
@@ -123,7 +147,20 @@ int main() {
         cin >> newName;
         img.saveImage(newName);
         cout << "Image saved as " << newName << endl;
-    } 
+    } else if (choice == 3) {
+        int level, blurSize;
+        cout << "Enter blur size:\n 1. Light\n 2. Medium\n 3. Strong\nYour choice: ";
+        cin >> level;
+        if (level == 1) { blurSize = 5;} 
+        else if (level == 2) {blurSize = 10;} 
+        else { blurSize = 15;}
+        blurImage(img, blurSize);
+        string newName;
+        cout << "Enter name to save the new image: ";
+        cin >> newName;
+        img.saveImage(newName);
+        cout << "Image saved as " << newName << endl;
+    }
     else {
         cout << "Exiting program." << endl;
     }
