@@ -50,6 +50,70 @@ void VerticalFlip(Image&img){
 }
 
 
+//Merge
+
+Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
+    if(img1.width==img2.width && img1.height==img2.height){
+        Image mergedImg(img1.width , img1. height);
+
+        for(int i=0 ; i < img1.width ; i++){
+            for(int j=0 ; j < img1.height ; j++){
+                for(int k=0 ; k < 3 ; k++){
+
+                    mergedImg(i,j,k)=(img1(i,j,k) + img2(i,j,k))/2 ;
+
+                }
+            }
+        }
+        return mergedImg ;
+    }
+    else if(mergeMethod==1){
+        int newWidth = min(img1.width , img2.width);
+        int newHeight = min(img1.height, img2.height);
+
+        Image mergedImg(newWidth, newHeight);
+
+        for(int i=0 ; i < newWidth ; i++){
+            for(int j=0 ; j < newHeight ; j++){
+                for(int k=0 ; k<3 ; k++){
+                   
+                 mergedImg(i,j,k)=(img1(i,j,k) + img2(i,j,k))/2 ;
+
+                }
+            }
+        }
+        return mergedImg ;
+    }
+    else if(mergeMethod==2){
+        int newWidth = max(img1.width , img2.width);
+        int newHeight= max(img1.height , img2.height);
+
+        Image mergedImg(newWidth, newHeight);
+
+        for(int i=0 ; i< newWidth ; i++){
+            for(int j= 0 ; j< newHeight ; j++){
+                for(int k=0 ; k<3 ; k++){
+ 
+                    int img1_x = i * img1.width / newWidth ;
+                    int img1_y = j * img1.height /newHeight ;
+                    
+                    int img2_x = i * img2.width / newWidth ;
+                    int img2_y = j * img2.height /newHeight ;
+
+
+                    mergedImg(i,j,k)=(img1(img1_x , img1_y , k) + img2(img2_x , img2_y , k)) / 2;
+                    
+                }
+            }
+
+        }
+        return mergedImg;
+    }
+}
+    
+
+
+
 int main()
 {
     string fileName;
@@ -62,25 +126,25 @@ int main()
 
     int choice = 0;
 
-    while (choice != 4)
+    while (choice != 5)
     {
         cout << "Choose a filter:" << endl;
         cout << "1. GrayScale" << endl;
         cout << "2. Flip" << endl;
-        cout << "3. Save Image" << endl;
-        cout << "4. Exit" << endl;
+        cout << "3. Merge" << endl;
+        cout << "4. Save Image" << endl;
+        cout << "5. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch (choice)
+        if (choice == 1)
         {
-        case 1:
             GrayScale(image);
             cout << "GrayScale applied successfully!" << endl;
-            break;
+        }
 
-        case 2:
+        else if (choice == 2)
         {
             int flipChoice;
 
@@ -91,46 +155,73 @@ int main()
             cout << "Enter your choice: ";
             cin >> flipChoice;
 
-            switch (flipChoice)
+            if (flipChoice == 1)
             {
-            case 1:
                 HorizontalFlip(image);
                 cout << "Horizontal Flip applied successfully" << endl;
-                break;
-
-            case 2:
-                VerticalFlip(image);
-                cout << "Vertical Flip applied successfully" << endl;
-                break;
-
-            default:
-                cout << "Invalid choice" << endl;
             }
 
-            break;
+            else if (flipChoice == 2)
+            {
+                VerticalFlip(image);
+                cout << "Vertical Flip applied successfully" << endl;
+            }
+
+            else
+            {
+                cout << "Invalid choice" << endl;
+            }
         }
 
-        case 3:
+        else if (choice == 3)
+        {
+            string fileName2;
+
+            cout << "Please enter the second image name: ";
+            cin >> fileName2;
+
+            Image image2(fileName2);
+
+            int mergeMethod = 0;
+
+            if (image.width != image2.width || image.height != image2.height)
+            {
+                cout << "Choose Merge type:" << endl;
+                cout << "1. Common Area" << endl;
+                cout << "2. Resize" << endl;
+
+                cout << "Enter your choice: ";
+                cin >> mergeMethod;
+            }
+
+            image = Merge(image, image2, mergeMethod);
+
+            cout << "Images merged successfully!" << endl;
+        }
+
+        else if (choice == 4)
         {
             string newName;
 
-            cout << "enter name to save the new image: ";
+            cout << "Enter name to save the new image: ";
             cin >> newName;
 
             image.saveImage(newName);
 
             cout << "Image saved successfully" << endl;
-            break;
         }
 
-        case 4:
+        else if (choice == 5)
+        {
             cout << "Goodbye" << endl;
-            break;
+        }
 
-        default:
+        else
+        {
             cout << "Invalid choice" << endl;
         }
     }
 
     return 0;
 }
+
