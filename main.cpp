@@ -110,6 +110,19 @@ Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
         return mergedImg;
     }
 }
+
+
+//Wano Sunlight
+
+void wanoSunlight(Image&img){
+    for(int i=0 ; i<img.width ; i++){
+        for(int j=0 ; j<img.height ; j++){
+            img(i ,j , 0)=min(255 , img(i,j,0)+60);
+            img(i , j , 1)= min(255 , img(i , j , 1)+40);
+            img(i , j , 2)= max(0 , img(i , j , 2)-20);
+        }
+    }
+}
     
 
 
@@ -126,14 +139,15 @@ int main()
 
     int choice = 0;
 
-    while (choice != 5)
+    while (choice != 6)
     {
         cout << "Choose a filter:" << endl;
         cout << "1. GrayScale" << endl;
         cout << "2. Flip" << endl;
         cout << "3. Merge" << endl;
-        cout << "4. Save Image" << endl;
-        cout << "5. Exit" << endl;
+        cout << "4. Wano Sunlight" << endl;
+        cout << "5. Save Image" << endl;
+        cout << "6. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -141,7 +155,7 @@ int main()
         if (choice == 1)
         {
             GrayScale(image);
-            cout << "GrayScale applied successfully!" << endl;
+            cout << "GrayScale applied successfully" << endl;
         }
 
         else if (choice == 2)
@@ -196,10 +210,16 @@ int main()
 
             image = Merge(image, image2, mergeMethod);
 
-            cout << "Images merged successfully!" << endl;
+            cout << "Images merged successfully" << endl;
         }
 
         else if (choice == 4)
+        {
+            wanoSunlight(image);
+            cout << "Wano Sunlight applied successfully" << endl;
+        }
+
+        else if (choice == 5)
         {
             string newName;
 
@@ -211,7 +231,7 @@ int main()
             cout << "Image saved successfully" << endl;
         }
 
-        else if (choice == 5)
+        else if (choice == 6)
         {
             cout << "Goodbye" << endl;
         }
@@ -224,4 +244,3 @@ int main()
 
     return 0;
 }
-
