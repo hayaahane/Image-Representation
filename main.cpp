@@ -105,15 +105,15 @@ int main() {
         return 1;
     }
     cout << "Choose a filter:" << endl;
-    cout << "1. Add Frame" << endl;
-    cout << "2. Resize Image" << endl;
-    cout << "3. Blur Image" << endl;
-    cout << "4. Infrared Image" << endl;
-    cout << "5. Exit" << endl;
+    cout << "4. Add Frame" << endl;
+    cout << "8. Resize Image" << endl;
+    cout << "12. Blur Image" << endl;
+    cout << "16. Infrared Image" << endl;
+    cout << "20. Exit" << endl;
     cout << "Your choice: ";
     cin >> choice;
 
-    if (choice == 1) {
+    if (choice == 4) {
         int frameType, frameColor;
         cout << "What type of frame would you like?" << endl;
         cout << "1. Simple" << endl;
@@ -132,7 +132,7 @@ int main() {
         cin >> newName;
         img.saveImage(newName);
         cout << "Image saved as " << newName << endl;
-    } else if (choice == 2) {
+    } else if (choice == 8) {
         int newW=0, newH=0;
         int resizeChoice;
         cout << "Choose resize method: " << endl;
@@ -158,7 +158,7 @@ int main() {
         cin >> newName;
         img.saveImage(newName);
         cout << "Image saved as " << newName << endl;
-    } else if (choice == 3) {
+    } else if (choice == 12) {
         int level, blurSize;
         cout << "Enter blur size:\n 1. Light\n 2. Medium\n 3. Strong\nYour choice: ";
         cin >> level;
@@ -171,7 +171,7 @@ int main() {
         cin >> newName;
         img.saveImage(newName);
         cout << "Image saved as " << newName << endl;
-    } else if (choice == 4) {
+    } else if (choice == 16) {
         infraredImage(img);
         string newName;
         cout << "Enter name to save the new image: ";
