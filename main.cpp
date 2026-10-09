@@ -66,41 +66,40 @@ void purplefilter(Image& image) {
 }
 int main() {
     string filename;
-    
+
     cout << "------- Welcome to Baby PhotoShop -------  " << endl;
     cout << "Please enter the image file name to load: ";
     cin >> filename;
-    Image currentImage;
-    try {
-        currentImage.loadNewImage(filename);
-        cout << "Image loaded successfully!" << endl;
-    } catch (...) {
+   Image currentImage(filename);
+   if (currentImage.width <= 0 || currentImage.height <= 0) {
         cout << "Error: File not found or invalid format!" << endl;
         return 1;
     }
-    Image originalImage = currentImage;
+    cout << "Image loaded successfully!" << endl;
+    
+    
     int choice = 0;
-    while (choice != 6) {
+    while (choice != 20) {
         
-        cout << "\n--------------- Main Menu ----------------" << endl;
-        cout << "1. Apply Filter 3: Invert Colors" << endl;
-        cout << "2. Apply Filter 7: Darken / Lighten " << endl;
-        cout << "3. Apply Filter 11: Crop Image" << endl;
-        cout << "4. Apply Filter 15: Purple Tint" << endl;
-        cout << "5. Save the current image" << endl;
-        cout << "6. Exit" << endl;
-        cout << "Choose an option (1-6): ";
+        cout << "---------------- Main Menu ----------------" << endl;
+        cout << "3. Invert Colors" << endl;
+        cout << "7. Darken / Lighten " << endl;
+        cout << "11. Crop Image" << endl;
+        cout << "15. Purple Tint" << endl;
+        cout << "19. Save the current image" << endl;
+        cout << "20. Exit" << endl;
+        cout << "Choose an option:   ";
         cin >> choice;
 
         switch (choice) {
-            case 1:{
+            case 3: {
 
                 invertImage(currentImage);
                 cout << "Invert filter applied successfully!" << endl;
                 break;
             }
 
-            case 2: {
+            case 7 : {
                
                 int subChoice;
                 cout << "Choose adjustment type:" << endl;
@@ -121,7 +120,7 @@ int main() {
                 break;
             }
 
-            case 3: {
+            case 11: {
                 int x, y, width, height;
                 cout << "Current image size: " << currentImage.width << " x " << currentImage.height << endl;
 
@@ -148,35 +147,64 @@ int main() {
                 break;
             }
 
-            case 4:{
+            case 15: {
 
                 purplefilter(currentImage);
                 cout << "Purple filter applied successfully!" << endl;
                 break;
             }
 
-            case 5: {
-                string outputName;
-                cout << "Enter output image name: ";
-                cin >> outputName;
+            case 19: {
+            string outputName;
+            cout << "Enter output image name: ";
+            cin >> outputName;
             currentImage.saveImage(outputName);
-                cout << "Image saved successfully as: " << outputName << endl;
-                
+            cout << "Image saved successfully as: " << outputName << endl;
+            
+            int nextStep;
+            while (true) {
+                cout << "\nDo you want to edit another image?" << endl;
+                cout << "1. Yes (Load new image)" << endl;
+                cout << "2. No (Exit)" << endl;
+                cin >> nextStep;
+
+                if (nextStep == 1) {
                     cout << "\n--- Load New Image ---" << endl;
-                  cout << "\nPlease enter the new image file name to load: ";
-                cin >> filename;
-                currentImage.loadNewImage(filename);
-                originalImage = currentImage;
-                cout << "New image loaded successfully!" << endl;
-                break;
+                    while (true) {
+                        cout << "Please enter the new image file name to load: ";
+                        cin >> filename;
+
+                        Image newImage(filename);
+                        if (newImage.width <= 0 || newImage.height <= 0) {
+                            cout << "Error: File not found or invalid format! Try again." << endl;
+                            continue;
+                        }
+
+                        currentImage = newImage;
+                        cout << "New image loaded successfully!" << endl;
+                        break;
+                    }
+                    break;
+                } 
+                else if (nextStep == 2) {
+                    choice = 20; 
+                    cout << "Exiting program. Goodbye!" << endl;
+                    break; 
+                } 
+                else {
+                    cout << "Invalid choice! Please enter 1 or 2." << endl;
+                }
             }
-            case 6:
+            break;
+        }
+            case 20:
                 cout << "Exiting program. Goodbye!" << endl;
                 break;
 
-            default:
-                cout << "Invalid option! Please enter a number between 1 and 6." << endl;
+            default:{
+                cout << "Invalid option! Please enter a number between 1 and 20." << endl;
                 break;
+            }
         }
     }
 
