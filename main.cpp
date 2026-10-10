@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Image_Class.h"
+#include <cmath>
 using namespace std;
 void blackandwhite (Image& image) {
     for (int x=0; x< image.width; x++)
@@ -54,6 +55,9 @@ void rotateimage (Image &image ,int angle){
         }
         image=newimage;
 }
+
+
+
 void detectedges (Image &image ) {
     for (int x=0; x< image.width; x++)
         for (int y=0; y< image.height; y++)
@@ -91,6 +95,8 @@ void detectedges (Image &image ) {
         }   
 }
 
+
+
 void wanoTV (Image&image){
     for (int x=0; x<image.width; x++){
         for(int y=0; y<image.height; y++){
@@ -108,6 +114,83 @@ void wanoTV (Image&image){
         }
     }
 }
+
+
+
+void skweImage (Image&image, float skewfactor){
+    double red = skewfactor*3.14/180;
+    double step = tan(red);
+    int newwidth = image.width + (image.height * step);
+    Image newimage(newwidth, image.height);
+    for (int x = 0; x < newimage.width; x++) {
+        for (int y = 0; y < newimage.height; y++) {
+            newimage.setPixel(x, y, 0, 255);
+            newimage.setPixel(x, y, 1, 255);
+            newimage.setPixel(x, y, 2, 255);
+        }
+    }
+    for (int x = 0; x < image.width; x++) {
+        for (int y = 0; y < image.height; y++) {
+            int newx = x + (y * step);
+            if (newx >= 0 && newx < newimage.width) {
+                for (int c = 0; c < 3; c++) {
+                    newimage.setPixel(newx, y, c, image(x, y, c));
+                }
+            }
+        }
+    }
+    image = newimage;
+}
+
+
+
+void oilPainting (Image&image){
+    int radius=5;
+    int levels=15;
+    Image newimage(image.width,image.height);
+    for (int x=0; x<image.width; x++){
+        for(int y=0; y<image.height; y++){
+            int intensityCount[15]={0};
+            int sumR[15]={0};
+            int sumG[15]={0};
+            int sumB[15]={0};
+            for(int a=-radius; a<=radius; a++){
+                for(int b=-radius; b<=radius; b++){
+                    int newX=x+a;
+                    int newY=y+b;
+                    if(newX>=0 && newX<image.width && newY>=0 && newY<image.height){
+                        int r=image(newX,newY,0);
+                        int g=image(newX,newY,1);
+                        int bl=image(newX,newY,2);
+                        int intensity=(r+g+bl)/3;
+                        int index=intensity*levels/256;
+                        if(index>14) index=14;
+                        intensityCount[index]++;
+                        sumR[index]+=r;
+                        sumG[index]+=g;
+                        sumB[index]+=bl;
+                    }
+                }
+            }
+                        int maxindex=0;
+                        int maxcount=0;
+                        for(int i=0; i<levels; i++){
+                            if(intensityCount[i]>maxcount){
+                                maxcount=intensityCount[i];
+                                maxindex=i;
+                            }
+                        }
+                                newimage.setPixel(x,y,0,sumR[maxindex]/maxcount);
+                                newimage.setPixel(x,y,1,sumG[maxindex]/maxcount);
+                                newimage.setPixel(x,y,2,sumB[maxindex]/maxcount);
+                            }
+                        }
+                        image=newimage;
+                    }
+                    
+                
+           
+ 
 int main() {
      Image image;
     string imagename;
@@ -116,37 +199,66 @@ int main() {
     cin>> imagename;
     if (image.loadNewImage(imagename)) {
         cout << "choose a filter :\n";
-        cout << "1. blackandwite\n";
-        cout << "2. rotateimage \n";
-        cout << "3. detectedges \n";
-        cout << "4. wanoTV \n";
+        cout << "2. blackandwite\n";
+        cout << "6. rotateimage \n";
+        cout << "10. detectedges \n";
+        cout << "14. wanoTV \n";
+        cout << "17. skweImage \n";
+        cout << "18. oilpanting \n";
         cin >> choice;
-        if (choice==1){
+
+        switch (choice) {
+
+            case 2:
             blackandwhite(image);
             image.saveImage("blackandwhite_"+imagename);
                 cout<< "done! BAW FILTER."<<endl;
-        }
-                else if (choice==2){
+                break;
+
+                case 6:{
                 int angle;
                  cout<< "Enter rotation angle (90, 180, 270): ";
                  cin>> angle;
                 rotateimage(image,angle);
                 image.saveImage("rotated_" + imagename);
                 cout<< "done! imagerotate."<<endl;
+                break;
                 }
-               else if (choice==3){
+
+                case 10:
                 detectedges(image);
                 image.saveImage("detectedges_" + imagename);
                 cout<< "done! detectedges."<<endl;
-                }
-               else if (choice==4){
+                break;
+
+                case 14:
                    wanoTV(image);
                    image.saveImage("wanoTV_" + imagename);
                    cout<< "done! wanoTV."<<endl;
-               }
-               else{
+                   break;
+
+                case 17:{
+                    float angle;
+                    cout<< "Enter skew angle: ";
+                    cin>> angle;
+                    skweImage(image,angle);
+                    image.saveImage("skewed_" + imagename);
+                    cout<< "done! skweImage."<<endl;
+                    break;
+                }
+
+                case 18:
+                    oilPainting(image);
+                    image.saveImage("oilpainting_" + imagename);
+                    cout<< "done! oilpainting."<<endl;
+                    break;
+
+                default:
             cout << "ERROR!" << endl;
+            break;
         }  
-    } 
+    }
     return 0;
-} 
+
+}
+    
