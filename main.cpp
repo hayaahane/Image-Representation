@@ -1,3 +1,4 @@
+
 /*
 Assignment 1 - Part 1
 CS213 - object oriented programming
@@ -12,9 +13,22 @@ Team Members:
 
 #include <iostream>
 #include "Image_Class.h"
-
+#include <string>
+#include <algorithm>
 using namespace std;
 
+// Filter 3: Invert Colors Filter
+void invertImage(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                img(i, j, k) = 255 - img(i, j, k);
+            }
+        }
+    }
+}
+
+// filter 4: Add Frame 
 void addFrame(Image&img, int frameType, int frameColor) {
     int R =255, G = 255, B = 255;
     if (frameColor == 2) {
@@ -44,6 +58,31 @@ void addFrame(Image&img, int frameType, int frameColor) {
     cout << "Frame added." << endl;
 }
 
+// Filter 7 (Part A): Lighten Image Filter
+void lightenImage(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+         int newVal = img(i, j, k) + (img(i, j, k) * 0.5); 
+              img(i, j, k) = min(255, newVal);
+
+            }
+        }
+    }
+}
+// Filter 7 (Part B): Darken Image Filter
+void darkenImage(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                img(i, j, k) = img(i, j, k) * 0.5;
+            }
+        }
+    }
+}
+
+
+// filter 8 : Resize Image
 void resizeImage(Image& img, int newW, int newH) {
     Image newImg(newW, newH);
     float xScale = (float)img.width / newW;
@@ -59,6 +98,20 @@ void resizeImage(Image& img, int newW, int newH) {
     } img = newImg;
 }
 
+// Filter 11: Crop Image Filter
+void cropimage(Image& image, int x, int y, int width, int height) {
+	Image croppedImage(width, height);
+	for (int i = 0; i < width; ++i) {
+		for (int j = 0; j < height; ++j) {
+			for (int k = 0; k < 3; ++k) {
+				croppedImage(i, j, k) = image(x + i, y + j, k);
+			}
+		}
+	}
+	image = croppedImage;
+}
+
+//filter 12 : Blur Image
 void blurImage (Image& img, int blurSize){
     Image temp = img;
     for (int i=0; i < img.width; ++i){
@@ -82,6 +135,19 @@ void blurImage (Image& img, int blurSize){
     }
 }
 
+// Filter 15: Purple Tint Filter
+void purplefilter(Image& image) {
+	for (int i = 0; i < image.width; ++i) {
+		for (int j = 0; j < image.height; ++j) {
+			int r = image(i, j, 0) + 40;
+			if (r > 255) r = 255;
+			image(i, j, 0) = r;
+			image(i, j, 1) = image(i, j, 1) * 0.7;
+		}
+	}
+}
+
+//filter 16 : Infrared Image
 void infraredImage(Image& img){
     for (int i=0; i < img.width; ++i){
         for (int j=0; j < img.height; ++j){
@@ -92,97 +158,206 @@ void infraredImage(Image& img){
     }
 }
 
+
 int main() {
     string filename;
-    int choice;
-    cout << "Welcome to Baby Photoshop" << endl;
-    cout << "please enter image name to load: ";
-    cin >> filename;
 
-    Image img(filename);
-    if (img.width == 0 || img.height == 0) {
-        cout << "Failed to load image." << endl;
+    cout << "------- Welcome to Baby PhotoShop -------  " << endl;
+    cout << "Please enter the image file name to load: ";
+    cin >> filename;
+   Image currentImage(filename);
+   if (currentImage.width <= 0 || currentImage.height <= 0) {
+        cout << "Error: File not found or invalid format!" << endl;
         return 1;
     }
-    cout << "Choose a filter:" << endl;
-    cout << "4. Add Frame" << endl;
-    cout << "8. Resize Image" << endl;
-    cout << "12. Blur Image" << endl;
-    cout << "16. Infrared Image" << endl;
-    cout << "20. Exit" << endl;
-    cout << "Your choice: ";
-    cin >> choice;
+    cout << "Image loaded successfully!" << endl;
+    
+    
+    int choice = 0;
+    while (choice != 20) {
+        
+        cout << "\n---------------- Main Menu ----------------" << endl;
+        cout << "3. Invert Colors" << endl;
+        cout << "4. Add Frame" << endl;
+        cout << "7. Darken / Lighten " << endl;
+        cout << "8. Resize Image" << endl;
+        cout << "11. Crop Image" << endl;
+        cout << "12. Blur Image" << endl;
+        cout << "15. Purple Tint" << endl;
+        cout << "16. Infrared Image" << endl;
+        cout << "19. Save the current image" << endl;
+        cout << "20. Exit" << endl;
+        cout << "Choose an option:   ";
+        cin >> choice;
 
-    if (choice == 4) {
-        int frameType, frameColor;
-        cout << "What type of frame would you like?" << endl;
-        cout << "1. Simple" << endl;
-        cout << "2. Fancy" << endl;
-        cout << "Your choice: ";
-        cin >> frameType;
-        cout << "What color would you like for the frame?" << endl;
-        cout << "1. White" << endl;
-        cout << "2. Blue" << endl;
-        cout << "3. Red" << endl;
-        cout << "Your choice: ";
-        cin >> frameColor;
-        addFrame(img, frameType, frameColor);
-        string newName;
-        cout << "Enter name to save the new image: ";
-        cin >> newName;
-        img.saveImage(newName);
-        cout << "Image saved as " << newName << endl;
-    } else if (choice == 8) {
-        int newW=0, newH=0;
-        int resizeChoice;
-        cout << "Choose resize method: " << endl;
-        cout << "1. New dimensions (Width, Height)" << endl;
-        cout << "2. Ratio" << endl;
-        cout << "Your choice: ";
-        cin >> resizeChoice;
-        if (resizeChoice == 1) {
-            cout << "Enter new width: ";
-            cin >> newW;
-            cout << "Enter new height: ";
-            cin >> newH;
-        } else if (resizeChoice == 2) {
-            float ratio;
-            cout << "Enter ratio (e.g., 0.5 for half size, 2.0 for double size): ";
-            cin >> ratio;
-            newW = img.width * ratio;
-            newH = img.height * ratio;
+        switch (choice) {
+            case 3: {
+
+                invertImage(currentImage);
+                cout << "Invert filter applied successfully!" << endl;
+                break;
+            }
+
+            case 4: {
+                int frameType, frameColor;
+                cout << "What type of frame would you like?" << endl;
+                cout << "1. Simple\n2. Fancy\nYour choice: ";
+                cin >> frameType;
+                cout << "What color would you like for the frame?" << endl;
+                cout << "1. White\n2. Blue\n3. Red\nYour choice: ";
+                cin >> frameColor;
+                addFrame(currentImage, frameType, frameColor);
+                cout << "Frame applied successfully!" << endl;
+                break;
+            }
+
+            case 7 : {
+               
+                int subChoice;
+                cout << "Choose adjustment type:" << endl;
+                cout << "1. Lighten image" << endl;
+                cout << "2. Darken image " << endl;
+                cout << "Enter choice (1 or 2): ";
+                cin >> subChoice;
+
+                if (subChoice == 1) {
+                    lightenImage(currentImage);
+                    cout << "Image lightened successfully!" << endl;
+                } else if (subChoice == 2) {
+                    darkenImage(currentImage);
+                    cout << "Image darkened successfully!" << endl;
+                } else {
+                    cout << "Invalid choice!" << endl;
+                }
+                break;
+            }
+
+            case 8: {
+                int newW=0, newH=0;
+                int resizeChoice;
+                cout << "Choose resize method: " << endl;
+                cout << "1. New dimensions (Width, Height)\n2. Ratio\nYour choice: ";
+                cin >> resizeChoice;
+                if (resizeChoice == 1) {
+                    cout << "Enter new width: "; cin >> newW;
+                    cout << "Enter new height: "; cin >> newH;
+                } else if (resizeChoice == 2) {
+                    float ratio;
+                    cout << "Enter ratio (e.g., 0.5 for half size, 2.0 for double size): ";
+                    cin >> ratio;
+                    newW = currentImage.width * ratio;
+                    newH = currentImage.height * ratio;
+                }
+                resizeImage(currentImage, newW, newH);
+                cout << "Image resized successfully!" << endl;
+                break;
+            }
+
+            case 11: {
+                int x, y, width, height;
+                cout << "Current image size: " << currentImage.width << " x " << currentImage.height << endl;
+
+                while (true) {
+                    cout << "Enter start position X: ";
+                    cin >> x;
+                    cout << "Enter start position Y: ";
+                    cin >> y;
+                    cout << "Enter crop Width: ";
+                    cin >> width;
+                    cout << "Enter crop Height: ";
+                    cin >> height;
+
+                    if (x < 0 || y < 0 || width <= 0 || height <= 0 || 
+                        x + width > currentImage.width || y + height > currentImage.height) {
+                        cout << "Invalid dimensions! The crop area must be within the image bounds. Try again." << endl;
+                    } else {
+                        break; 
+                    }
+                
+                }  
+                cropimage(currentImage, x, y, width, height);
+                cout << "Image cropped successfully!" << endl;
+                break;
+            }
+
+            case 12: {
+                int level, blurSize;
+                cout << "Enter blur size:\n 1. Light\n 2. Medium\n 3. Strong\nYour choice: ";
+                cin >> level;
+                if (level == 1) { blurSize = 5;} 
+                else if (level == 2) {blurSize = 10;} 
+                else { blurSize = 15;}
+                blurImage(currentImage, blurSize);
+                cout << "Blur applied successfully!" << endl;
+                break;
+            }
+
+            case 15: {
+
+                purplefilter(currentImage);
+                cout << "Purple filter applied successfully!" << endl;
+                break;
+            }
+
+            case 16: {
+                infraredImage(currentImage);
+                cout << "Infrared filter applied successfully!" << endl;
+                break;
+            }
+
+            case 19: {
+            string outputName;
+            cout << "Enter output image name: ";
+            cin >> outputName;
+            currentImage.saveImage(outputName);
+            cout << "Image saved successfully as: " << outputName << endl;
+            
+            int nextStep;
+            while (true) {
+                cout << "\nDo you want to edit another image?" << endl;
+                cout << "1. Yes (Load new image)" << endl;
+                cout << "2. No (Exit)" << endl;
+                cin >> nextStep;
+
+                if (nextStep == 1) {
+                    cout << "\n--- Load New Image ---" << endl;
+                    while (true) {
+                        cout << "Please enter the new image file name to load: ";
+                        cin >> filename;
+
+                        Image newImage(filename);
+                        if (newImage.width <= 0 || newImage.height <= 0) {
+                            cout << "Error: File not found or invalid format! Try again." << endl;
+                            continue;
+                        }
+
+                        currentImage = newImage;
+                        cout << "New image loaded successfully!" << endl;
+                        break;
+                    }
+                    break;
+                } 
+                else if (nextStep == 2) {
+                    choice = 20; 
+                    cout << "Exiting program. Goodbye!" << endl;
+                    break; 
+                } 
+                else {
+                    cout << "Invalid choice! Please enter 1 or 2." << endl;
+                }
+            }
+            break;
         }
-        resizeImage(img, newW, newH);
-        string newName;
-        cout << "Enter name to save the new image: ";
-        cin >> newName;
-        img.saveImage(newName);
-        cout << "Image saved as " << newName << endl;
-    } else if (choice == 12) {
-        int level, blurSize;
-        cout << "Enter blur size:\n 1. Light\n 2. Medium\n 3. Strong\nYour choice: ";
-        cin >> level;
-        if (level == 1) { blurSize = 5;} 
-        else if (level == 2) {blurSize = 10;} 
-        else { blurSize = 15;}
-        blurImage(img, blurSize);
-        string newName;
-        cout << "Enter name to save the new image: ";
-        cin >> newName;
-        img.saveImage(newName);
-        cout << "Image saved as " << newName << endl;
-    } else if (choice == 16) {
-        infraredImage(img);
-        string newName;
-        cout << "Enter name to save the new image: ";
-        cin >> newName;
-        img.saveImage(newName);
-        cout << "Image saved as " << newName << endl;
+            case 20:
+                cout << "Exiting program. Goodbye!" << endl;
+                break;
+
+            default:{
+                cout << "Invalid option! Please enter a number between 1 and 20." << endl;
+                break;
+            }
+        }
     }
-    else {
-        cout << "Exiting program." << endl;
-    }
+
     return 0;
 }
-
-
