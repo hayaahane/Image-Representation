@@ -2,7 +2,7 @@
 #include"Image_Class.h"
 using namespace std;
 
-//GrayScale
+//Filter 1: Grayscale Conversion
 void GrayScale(Image&img) {
     for ( int i=0 ; i < img.width ; i++){
         for (int j=0 ; j < img.height ; j++){
@@ -19,7 +19,7 @@ void GrayScale(Image&img) {
     }
 }
 
-//flip
+//Filter 5: Flip Image
 void  HorizontalFlip (Image&img) {
     for(int i=0 ; i < img.width/2 ; i++){
         for(int j=0 ; j < img.height ; j++){
@@ -50,7 +50,7 @@ void VerticalFlip(Image&img){
 }
 
 
-//Merge
+//Filter 9: Merge Images
 
 Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
     if(img1.width==img2.width && img1.height==img2.height){
@@ -112,7 +112,7 @@ Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
 }
 
 
-//Wano Sunlight
+//Filter 13:Wano Sunlight
 
 void wanoSunlight(Image&img){
     for(int i=0 ; i<img.width ; i++){
@@ -126,121 +126,187 @@ void wanoSunlight(Image&img){
     
 
 
+int main(){
+    string filename;
 
-int main()
-{
-    string fileName;
+    cout << "------- Welcome to Baby Photoshop -------" << endl;
+    cout << "Please enter the image file name to load: ";
+    cin >> filename;
 
-    cout << "Welcome to Baby Photoshop" << endl;
-    cout << "Please enter your file name: ";
-    cin >> fileName;
+    Image currentImage(filename);
+    if (currentImage.width <= 0 || currentImage.height <= 0) {
+        cout << "Error: File not found or invalid format!" << endl;
+        return 1;
+    }
+    cout << "Image loaded successfully!" << endl;    
+    
+    int choice = 0; 
 
-    Image image(fileName);
-
-    int choice = 0;
-
-    while (choice != 6)
+    while (choice != 20)
     {
-        cout << "Choose a filter:" << endl;
+        cout << "---------------- Main Menu ----------------" << endl;
         cout << "1. GrayScale" << endl;
-        cout << "2. Flip" << endl;
-        cout << "3. Merge" << endl;
-        cout << "4. Wano Sunlight" << endl;
-        cout << "5. Save Image" << endl;
-        cout << "6. Exit" << endl;
-
-        cout << "Enter your choice: ";
+        cout << "5. Flip" << endl;
+        cout << "9. Merge" << endl; 
+        cout << "13. Wano Sunlight" << endl; 
+        cout << "19. Save the current image" << endl; 
+        cout << "20. Exit" << endl; 
+        cout << "Choose an option: "; 
         cin >> choice;
 
-        if (choice == 1)
-        {
-            GrayScale(image);
-            cout << "GrayScale applied successfully" << endl;
-        }
 
-        else if (choice == 2)
-        {
-            int flipChoice;
-
-            cout << "Choose Flip type:" << endl;
-            cout << "1. Horizontal Flip" << endl;
-            cout << "2. Vertical Flip" << endl;
-
-            cout << "Enter your choice: ";
-            cin >> flipChoice;
-
-            if (flipChoice == 1)
+        switch (choice)
+         { 
+            case 1:
             {
-                HorizontalFlip(image);
-                cout << "Horizontal Flip applied successfully" << endl;
+                GrayScale(currentImage); 
+                cout << "GrayScale applied successfully!" << endl;
+                break;
             }
 
-            else if (flipChoice == 2)
-            {
-                VerticalFlip(image);
-                cout << "Vertical Flip applied successfully" << endl;
+
+            case 5:
+            { 
+                int flipChoice; 
+                cout << "Choose Flip type:" << endl; 
+                cout << "1. Horizontal Flip" << endl; 
+                cout << "2. Vertical Flip" << endl; 
+                cout << "Enter your choice: "; 
+                cin >> flipChoice;
+
+                if (flipChoice == 1) 
+                { 
+                    HorizontalFlip(currentImage); cout << "Horizontal Flip applied successfully!" << endl; 
+                } 
+                else if (flipChoice == 2) 
+                { 
+                    VerticalFlip(currentImage); cout << "Vertical Flip applied successfully!" << endl; 
+                } 
+                else 
+                { 
+                    cout << "Invalid choice!" << endl; 
+                } 
+                break; 
             }
 
-            else
-            {
-                cout << "Invalid choice" << endl;
+
+            case 9: 
+            { 
+                string filename2; cout << "Please enter the second image name: "; 
+                cin >> filename2; 
+
+                Image currentImage2(filename2); 
+
+                if (currentImage2.width <= 0 || currentImage2.height <= 0) 
+                { 
+                    cout << "Error: File not found or invalid format!" << endl; 
+                    
+                    break; 
+                } 
+
+                int mergeMethod = 0; 
+
+                if (currentImage.width != currentImage2.width || currentImage.height != currentImage2.height) 
+                { 
+                    cout << "Choose Merge type:" << endl; 
+                    cout << "1. Common Area" << endl; 
+                    cout << "2. Resize" << endl; 
+                    cout << "Enter your choice: "; 
+                    cin >> mergeMethod; 
+                    
+                    if (mergeMethod != 1 && mergeMethod != 2) 
+                    { 
+                        cout << "Invalid choice!" << endl; 
+                        break; 
+                    } 
+                }
+
+                currentImage = Merge(currentImage, currentImage2, mergeMethod); 
+                
+                cout << "Images merged successfully!" << endl; 
+                break; 
             }
-        }
 
-        else if (choice == 3)
-        {
-            string fileName2;
 
-            cout << "Please enter the second image name: ";
-            cin >> fileName2;
-
-            Image image2(fileName2);
-
-            int mergeMethod = 0;
-
-            if (image.width != image2.width || image.height != image2.height)
-            {
-                cout << "Choose Merge type:" << endl;
-                cout << "1. Common Area" << endl;
-                cout << "2. Resize" << endl;
-
-                cout << "Enter your choice: ";
-                cin >> mergeMethod;
+            case 13: 
+            { 
+                wanoSunlight(currentImage); 
+                cout << "Wano Sunlight applied successfully!" << endl; 
+                break; 
             }
 
-            image = Merge(image, image2, mergeMethod);
 
-            cout << "Images merged successfully" << endl;
-        }
+            case 19: 
+            { 
+                string outputName; 
 
-        else if (choice == 4)
-        {
-            wanoSunlight(image);
-            cout << "Wano Sunlight applied successfully" << endl;
-        }
+                cout << "Enter output image name: "; 
+                cin >> outputName; 
+                
+                currentImage.saveImage(outputName); 
+                
+                cout << "Image saved successfully as: " << outputName << endl; 
+                
+                int nextStep; 
+                
+                while (true) 
+                { 
+                    cout << "\nDo you want to edit another image?" << endl; 
+                    cout << "1. Yes (Load new image)" << endl; 
+                    cout << "2. No (Exit)" << endl; 
+                    cout << "Enter your choice: "; 
+                    cin >> nextStep; 
+                    
+                    if (nextStep == 1) 
+                    { 
+                        cout << "\n--- Load New Image ---" << endl;
+                        
+                        while (true) 
+                        { 
+                            cout << "Please enter the new image file name to load: "; 
+                            cin >> filename; 
+                            
+                            Image newImage(filename); 
+                            if (newImage.width <= 0 || newImage.height <= 0) 
+                            { 
+                                cout << "Error: File not found or invalid format! Try again." << endl; 
+                                continue; 
+                            } 
+                            
+                            currentImage = newImage; 
+                            cout << "New image loaded successfully!" << endl; 
+                            break; 
+                        } 
+                        break; 
+                    } 
+                    else if (nextStep == 2) 
+                    { 
+                        choice = 20; cout << "Exiting program. Goodbye!" << endl; 
+                        break; 
+                    } 
+                    else 
+                    { 
+                        cout << "Invalid choice! Please enter 1 or 2." << endl; 
+                    } 
+                } 
 
-        else if (choice == 5)
-        {
-            string newName;
-
-            cout << "Enter name to save the new image: ";
-            cin >> newName;
-
-            image.saveImage(newName);
-
-            cout << "Image saved successfully" << endl;
-        }
-
-        else if (choice == 6)
-        {
-            cout << "Goodbye" << endl;
-        }
-
-        else
-        {
-            cout << "Invalid choice" << endl;
-        }
-    }
-
-    return 0;
+                break; 
+            }
+            
+            case 20: 
+            { 
+                cout << "Exiting program. Goodbye!" << endl; 
+                break; 
+            } 
+            default: 
+            { 
+                cout << "Invalid option! Please enter a valid menu number." << endl; 
+                break; 
+            } 
+        } 
+    } 
+    return 0; 
 }
+
+
+
