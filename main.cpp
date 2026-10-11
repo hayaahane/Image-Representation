@@ -1,6 +1,22 @@
-<<<<<<< HEAD
-#include<iostream>
-#include"Image_Class.h"
+
+
+
+/*
+Assignment 1 - Part 1
+CS213 - object oriented programming
+Section: S11
+
+Team Members:
+1. Haneen Osama Reda          - 20250206    -filters (1, 5, 9, 13)
+2. Sara Hamada Mohamed        - 20250270    -filters (2, 6, 10, 14)
+3. Nermeen Hesham Ezz El-Din  - 20250706    -filters (3, 7, 11, 15)
+4. Haya Hany Fathy            - 20250725    -filters (4, 8, 12, 16)
+*/
+
+#include <iostream>
+#include "Image_Class.h"
+#include <string>
+#include <algorithm>
 using namespace std;
 
 //Filter 1: Grayscale Conversion
@@ -20,6 +36,47 @@ void GrayScale(Image&img) {
     }
 }
 
+// Filter 3: Invert Colors Filter
+void invertImage(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                img(i, j, k) = 255 - img(i, j, k);
+
+            }
+        }
+    }
+}
+
+// filter 4: Add Frame 
+void addFrame(Image&img, int frameType, int frameColor) {
+    int R =255, G = 255, B = 255;
+    if (frameColor == 2) {
+        R = 0, G = 0, B = 255;
+    } else if (frameColor == 3) {
+        R = 255, G = 0, B = 0;
+    }
+    int frameSize = 20;
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j< img.height; ++j) {
+            if (frameType == 1) {
+                if (i < frameSize || i >= img.width - frameSize || j < frameSize || j >= img.height - frameSize) {
+                    img(i, j, 0) = R;
+                    img(i, j, 1) = G;
+                    img(i, j, 2) = B;
+                }
+            } else if (frameType == 2) {
+                 if ((i < 10 || i >= img.width - 10 || j < 10 || j >= img.height - 10) || (i >= 15 && i < 18) || (j >= 15 && j < 18) || (i >= img.width - 18 && i < img.width - 15) || (j >= img.height - 18 && j < img.height - 15)) {
+                    img(i, j, 0) = R;
+                    img(i, j, 1) = G;
+                    img(i, j, 2) = B;
+                }
+            }
+
+        }
+    }
+    cout << "Frame added." << endl;
+}
 //Filter 5: Flip Image
 void  HorizontalFlip (Image&img) {
     for(int i=0 ; i < img.width/2 ; i++){
@@ -45,42 +102,52 @@ void VerticalFlip(Image&img){
                 unsigned char temp = img(i,j,k);
                 img(i,j,k)= img(i,img.height-j-1,k);
                 img(i,img.height-j-1,k)= temp;
-=======
-
-/*
-Assignment 1 - Part 1
-CS213 - object oriented programming
-Section: S11
-
-Team Members:
-1. Haneen Osama Reda          - 20250206    -filters (1, 5, 9, 13)
-2. Sara Hamada Mohamed        - 20250270    -filters (2, 6, 10, 14)
-3. Nermeen Hesham Ezz El-Din  - 20250706    -filters (3, 7, 11, 15)
-4. Haya Hany Fathy            - 20250725    -filters (4, 8, 12, 16)
-*/
-
-#include <iostream>
-#include "Image_Class.h"
-#include <string>
-#include <algorithm>
-using namespace std;
-
-// Filter 3: Invert Colors Filter
-void invertImage(Image& img) {
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            for (int k = 0; k < 3; ++k) {
-                img(i, j, k) = 255 - img(i, j, k);
->>>>>>> 9e933a506373265dc7991a6d31b49f70d75cc911
             }
         }
     }
 }
 
-<<<<<<< HEAD
+
+// Filter 7 (Part A): Lighten Image Filter
+void lightenImage(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+         int newVal = img(i, j, k) + (img(i, j, k) * 0.5); 
+              img(i, j, k) = min(255, newVal);
+
+            }
+        }
+    }
+}
+// Filter 7 (Part B): Darken Image Filter
+void darkenImage(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                img(i, j, k) = img(i, j, k) * 0.5;
+            }
+        }
+    }
+}
+
+// filter 8 : Resize Image
+void resizeImage(Image& img, int newW, int newH) {
+    Image newImg(newW, newH);
+    float xScale = (float)img.width / newW;
+    float yScale = (float)img.height / newH;
+    for (int i = 0; i < newW; ++i) {
+        for (int j = 0; j < newH; ++j){
+            int old_i = i * xScale;
+            int old_j = j * yScale;
+            newImg(i, j, 0) = img(old_i, old_j, 0);
+            newImg(i, j, 1) = img(old_i, old_j, 1);
+            newImg(i, j, 2) = img(old_i, old_j, 2);
+        }
+    } img = newImg;
+}
 
 //Filter 9: Merge Images
-
 Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
     if(img1.width==img2.width && img1.height==img2.height){
         Image mergedImg(img1.width , img1. height);
@@ -132,282 +199,14 @@ Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
 
                     mergedImg(i,j,k)=(img1(img1_x , img1_y , k) + img2(img2_x , img2_y , k)) / 2;
                     
-=======
-// filter 4: Add Frame 
-void addFrame(Image&img, int frameType, int frameColor) {
-    int R =255, G = 255, B = 255;
-    if (frameColor == 2) {
-        R = 0, G = 0, B = 255;
-    } else if (frameColor == 3) {
-        R = 255, G = 0, B = 0;
-    }
-    int frameSize = 20;
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j< img.height; ++j) {
-            if (frameType == 1) {
-                if (i < frameSize || i >= img.width - frameSize || j < frameSize || j >= img.height - frameSize) {
-                    img(i, j, 0) = R;
-                    img(i, j, 1) = G;
-                    img(i, j, 2) = B;
-                }
-            } else if (frameType == 2) {
-                 if ((i < 10 || i >= img.width - 10 || j < 10 || j >= img.height - 10) || (i >= 15 && i < 18) || (j >= 15 && j < 18) || (i >= img.width - 18 && i < img.width - 15) || (j >= img.height - 18 && j < img.height - 15)) {
-                    img(i, j, 0) = R;
-                    img(i, j, 1) = G;
-                    img(i, j, 2) = B;
->>>>>>> 9e933a506373265dc7991a6d31b49f70d75cc911
                 }
             }
 
         }
-<<<<<<< HEAD
         return mergedImg;
     }
 }
 
-
-//Filter 13:Wano Sunlight
-
-void wanoSunlight(Image&img){
-    for(int i=0 ; i<img.width ; i++){
-        for(int j=0 ; j<img.height ; j++){
-            img(i ,j , 0)=min(255 , img(i,j,0)+60);
-            img(i , j , 1)= min(255 , img(i , j , 1)+40);
-            img(i , j , 2)= max(0 , img(i , j , 2)-20);
-        }
-    }
-}
-    
-
-
-int main(){
-    string filename;
-
-    cout << "------- Welcome to Baby Photoshop -------" << endl;
-    cout << "Please enter the image file name to load: ";
-    cin >> filename;
-
-    Image currentImage(filename);
-    if (currentImage.width <= 0 || currentImage.height <= 0) {
-        cout << "Error: File not found or invalid format!" << endl;
-        return 1;
-    }
-    cout << "Image loaded successfully!" << endl;    
-    
-    int choice = 0; 
-
-    while (choice != 20)
-    {
-        cout << "---------------- Main Menu ----------------" << endl;
-        cout << "1. GrayScale" << endl;
-        cout << "5. Flip" << endl;
-        cout << "9. Merge" << endl; 
-        cout << "13. Wano Sunlight" << endl; 
-        cout << "19. Save the current image" << endl; 
-        cout << "20. Exit" << endl; 
-        cout << "Choose an option: "; 
-        cin >> choice;
-
-
-        switch (choice)
-         { 
-            case 1:
-            {
-                GrayScale(currentImage); 
-                cout << "GrayScale applied successfully!" << endl;
-                break;
-            }
-
-
-            case 5:
-            { 
-                int flipChoice; 
-                cout << "Choose Flip type:" << endl; 
-                cout << "1. Horizontal Flip" << endl; 
-                cout << "2. Vertical Flip" << endl; 
-                cout << "Enter your choice: "; 
-                cin >> flipChoice;
-
-                if (flipChoice == 1) 
-                { 
-                    HorizontalFlip(currentImage); cout << "Horizontal Flip applied successfully!" << endl; 
-                } 
-                else if (flipChoice == 2) 
-                { 
-                    VerticalFlip(currentImage); cout << "Vertical Flip applied successfully!" << endl; 
-                } 
-                else 
-                { 
-                    cout << "Invalid choice!" << endl; 
-                } 
-                break; 
-            }
-
-
-            case 9: 
-            { 
-                string filename2; cout << "Please enter the second image name: "; 
-                cin >> filename2; 
-
-                Image currentImage2(filename2); 
-
-                if (currentImage2.width <= 0 || currentImage2.height <= 0) 
-                { 
-                    cout << "Error: File not found or invalid format!" << endl; 
-                    
-                    break; 
-                } 
-
-                int mergeMethod = 0; 
-
-                if (currentImage.width != currentImage2.width || currentImage.height != currentImage2.height) 
-                { 
-                    cout << "Choose Merge type:" << endl; 
-                    cout << "1. Common Area" << endl; 
-                    cout << "2. Resize" << endl; 
-                    cout << "Enter your choice: "; 
-                    cin >> mergeMethod; 
-                    
-                    if (mergeMethod != 1 && mergeMethod != 2) 
-                    { 
-                        cout << "Invalid choice!" << endl; 
-                        break; 
-                    } 
-                }
-
-                currentImage = Merge(currentImage, currentImage2, mergeMethod); 
-                
-                cout << "Images merged successfully!" << endl; 
-                break; 
-            }
-
-
-            case 13: 
-            { 
-                wanoSunlight(currentImage); 
-                cout << "Wano Sunlight applied successfully!" << endl; 
-                break; 
-            }
-
-
-            case 19: 
-            { 
-                string outputName; 
-
-                cout << "Enter output image name: "; 
-                cin >> outputName; 
-                
-                currentImage.saveImage(outputName); 
-                
-                cout << "Image saved successfully as: " << outputName << endl; 
-                
-                int nextStep; 
-                
-                while (true) 
-                { 
-                    cout << "\nDo you want to edit another image?" << endl; 
-                    cout << "1. Yes (Load new image)" << endl; 
-                    cout << "2. No (Exit)" << endl; 
-                    cout << "Enter your choice: "; 
-                    cin >> nextStep; 
-                    
-                    if (nextStep == 1) 
-                    { 
-                        cout << "\n--- Load New Image ---" << endl;
-                        
-                        while (true) 
-                        { 
-                            cout << "Please enter the new image file name to load: "; 
-                            cin >> filename; 
-                            
-                            Image newImage(filename); 
-                            if (newImage.width <= 0 || newImage.height <= 0) 
-                            { 
-                                cout << "Error: File not found or invalid format! Try again." << endl; 
-                                continue; 
-                            } 
-                            
-                            currentImage = newImage; 
-                            cout << "New image loaded successfully!" << endl; 
-                            break; 
-                        } 
-                        break; 
-                    } 
-                    else if (nextStep == 2) 
-                    { 
-                        choice = 20; cout << "Exiting program. Goodbye!" << endl; 
-                        break; 
-                    } 
-                    else 
-                    { 
-                        cout << "Invalid choice! Please enter 1 or 2." << endl; 
-                    } 
-                } 
-
-                break; 
-            }
-            
-            case 20: 
-            { 
-                cout << "Exiting program. Goodbye!" << endl; 
-                break; 
-            } 
-            default: 
-            { 
-                cout << "Invalid option! Please enter a valid menu number." << endl; 
-                break; 
-            } 
-        } 
-    } 
-    return 0; 
-}
-
-
-
-=======
-    }
-    cout << "Frame added." << endl;
-}
-
-// Filter 7 (Part A): Lighten Image Filter
-void lightenImage(Image& img) {
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            for (int k = 0; k < 3; ++k) {
-         int newVal = img(i, j, k) + (img(i, j, k) * 0.5); 
-              img(i, j, k) = min(255, newVal);
-
-            }
-        }
-    }
-}
-// Filter 7 (Part B): Darken Image Filter
-void darkenImage(Image& img) {
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            for (int k = 0; k < 3; ++k) {
-                img(i, j, k) = img(i, j, k) * 0.5;
-            }
-        }
-    }
-}
-
-
-// filter 8 : Resize Image
-void resizeImage(Image& img, int newW, int newH) {
-    Image newImg(newW, newH);
-    float xScale = (float)img.width / newW;
-    float yScale = (float)img.height / newH;
-    for (int i = 0; i < newW; ++i) {
-        for (int j = 0; j < newH; ++j){
-            int old_i = i * xScale;
-            int old_j = j * yScale;
-            newImg(i, j, 0) = img(old_i, old_j, 0);
-            newImg(i, j, 1) = img(old_i, old_j, 1);
-            newImg(i, j, 2) = img(old_i, old_j, 2);
-        }
-    } img = newImg;
-}
 
 // Filter 11: Crop Image Filter
 void cropimage(Image& image, int x, int y, int width, int height) {
@@ -445,6 +244,19 @@ void blurImage (Image& img, int blurSize){
         }
     }
 }
+
+
+//Filter 13:Wano Sunlight
+void wanoSunlight(Image&img){
+    for(int i=0 ; i<img.width ; i++){
+        for(int j=0 ; j<img.height ; j++){
+            img(i ,j , 0)=min(255 , img(i,j,0)+60);
+            img(i , j , 1)= min(255 , img(i , j , 1)+40);
+            img(i , j , 2)= max(0 , img(i , j , 2)-20);
+        }
+    }
+}
+
 
 // Filter 15: Purple Tint Filter
 void purplefilter(Image& image) {
@@ -488,12 +300,16 @@ int main() {
     while (choice != 20) {
         
         cout << "\n---------------- Main Menu ----------------" << endl;
+        cout << "1. Grayscale Conversion" << endl;
         cout << "3. Invert Colors" << endl;
         cout << "4. Add Frame" << endl;
+        cout << "5. Flip Image" << endl;
         cout << "7. Darken / Lighten " << endl;
         cout << "8. Resize Image" << endl;
+        cout << "9. Merge Image" << endl;
         cout << "11. Crop Image" << endl;
         cout << "12. Blur Image" << endl;
+        cout << "13. Wano Sunlight" << endl; 
         cout << "15. Purple Tint" << endl;
         cout << "16. Infrared Image" << endl;
         cout << "19. Save the current image" << endl;
@@ -502,6 +318,13 @@ int main() {
         cin >> choice;
 
         switch (choice) {
+            case 1:
+            {
+                GrayScale(currentImage); 
+                cout << "GrayScale applied successfully!" << endl;
+                break;
+            }
+
             case 3: {
 
                 invertImage(currentImage);
@@ -520,6 +343,30 @@ int main() {
                 addFrame(currentImage, frameType, frameColor);
                 cout << "Frame applied successfully!" << endl;
                 break;
+            }
+
+            case 5:
+            { 
+                int flipChoice; 
+                cout << "Choose Flip type:" << endl; 
+                cout << "1. Horizontal Flip" << endl; 
+                cout << "2. Vertical Flip" << endl; 
+                cout << "Enter your choice: "; 
+                cin >> flipChoice;
+
+                if (flipChoice == 1) 
+                { 
+                    HorizontalFlip(currentImage); cout << "Horizontal Flip applied successfully!" << endl; 
+                } 
+                else if (flipChoice == 2) 
+                { 
+                    VerticalFlip(currentImage); cout << "Vertical Flip applied successfully!" << endl; 
+                } 
+                else 
+                { 
+                    cout << "Invalid choice!" << endl; 
+                } 
+                break; 
             }
 
             case 7 : {
@@ -564,6 +411,44 @@ int main() {
                 break;
             }
 
+            case 9: 
+            { 
+                string filename2; cout << "Please enter the second image name: "; 
+                cin >> filename2; 
+
+                Image currentImage2(filename2); 
+
+                if (currentImage2.width <= 0 || currentImage2.height <= 0) 
+                { 
+                    cout << "Error: File not found or invalid format!" << endl; 
+                    
+                    break; 
+                } 
+
+                int mergeMethod = 0; 
+
+                if (currentImage.width != currentImage2.width || currentImage.height != currentImage2.height) 
+                { 
+                    cout << "Choose Merge type:" << endl; 
+                    cout << "1. Common Area" << endl; 
+                    cout << "2. Resize" << endl; 
+                    cout << "Enter your choice: "; 
+                    cin >> mergeMethod; 
+                    
+                    if (mergeMethod != 1 && mergeMethod != 2) 
+                    { 
+                        cout << "Invalid choice!" << endl; 
+                        break; 
+                    } 
+                }
+
+                currentImage = Merge(currentImage, currentImage2, mergeMethod); 
+                
+                cout << "Images merged successfully!" << endl; 
+                break; 
+            }
+
+
             case 11: {
                 int x, y, width, height;
                 cout << "Current image size: " << currentImage.width << " x " << currentImage.height << endl;
@@ -601,6 +486,13 @@ int main() {
                 blurImage(currentImage, blurSize);
                 cout << "Blur applied successfully!" << endl;
                 break;
+            }
+
+            case 13: 
+            { 
+                wanoSunlight(currentImage); 
+                cout << "Wano Sunlight applied successfully!" << endl; 
+                break; 
             }
 
             case 15: {
@@ -672,4 +564,4 @@ int main() {
 
     return 0;
 }
->>>>>>> 9e933a506373265dc7991a6d31b49f70d75cc911
+
