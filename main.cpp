@@ -1,5 +1,5 @@
 /*
-Assignment 1 - Part 1
+Assignment 1
 CS213 - object oriented programming
 Section: S11
 
@@ -159,7 +159,7 @@ void rotateimage (Image &image ,int angle){
             }
         }
         image=newimage;
-}
+}   
 
     
 // Filter 7 (Part A): Lighten Image Filter
@@ -259,6 +259,7 @@ Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
         }
         return mergedImg;
     }
+    return img1;
 }
 
 //filter 10: Edge Detection Filter
@@ -514,8 +515,8 @@ int main() {
             }
 
             case 2:
-            blackandwhite(image);{
-            image.saveImage("blackandwhite_"+imagename);
+            blackandwhite(currentImage);{
+            currentImage.saveImage("blackandwhite_"+filename);
                 cout<< "done! BAW FILTER."<<endl;
                 break;
             }
@@ -568,8 +569,8 @@ int main() {
                 int angle;
                  cout<< "Enter rotation angle (90, 180, 270): ";
                  cin>> angle;
-                rotateimage(image,angle);
-                image.saveImage("rotated_" + imagename);
+                rotateimage(currentImage,angle);
+                currentImage.saveImage("rotated_" + filename);
                 cout<< "done! imagerotate."<<endl;
                 break;
                 }
@@ -654,8 +655,8 @@ int main() {
             }
 
             case 10:{
-                detectedges(image);
-                image.saveImage("detectedges_" + imagename);
+                detectedges(currentImage);
+                currentImage.saveImage("detectedges_" + filename);
                 cout<< "done! detectedges."<<endl;
                 break;
             }
@@ -707,8 +708,8 @@ int main() {
             }
 
             case 14:{
-                   wanoTV(image);
-                   image.saveImage("wanoTV_" + imagename);
+                   wanoTV(currentImage);
+                   currentImage.saveImage("wanoTV_" + filename);
                    cout<< "done! wanoTV."<<endl;
                    break;
             }
@@ -730,15 +731,15 @@ int main() {
                     float angle;
                     cout<< "Enter skew angle: ";
                     cin>> angle;
-                    skweImage(image,angle);
-                    image.saveImage("skewed_" + imagename);
+                    skweImage(currentImage,angle);
+                    currentImage.saveImage("skewed_" + filename);
                     cout<< "done! skweImage."<<endl;
                     break;
                 }
 
                 case 18:{
-                    oilPainting(image);
-                    image.saveImage("oilpainting_" + imagename);
+                    oilPainting(currentImage);
+                    currentImage.saveImage("oilpainting_" + filename);
                     cout<< "done! oilpainting."<<endl;
                     break;
                 }
@@ -800,4 +801,7 @@ int main() {
 
     return 0;
 }
+
+
+
 
