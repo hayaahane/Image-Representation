@@ -8,12 +8,12 @@
 
 ## Student Team Info
 
-| # | Name | ID | Section | Filters Implemented |
-| :-: | :--- | :-: | :-: | :--- |
-| **1** | Haneen Osama Reda | 20250206 | -- | Grayscale Conversion, Flip Image, Merge Images, Sunlight Filter |
-| **2** | Sara Hamada Mohamed | 20250270 | -- | Black & White, Rotate Image, Detect Image Edges, Old TV Effect |
-| **3** | Nermeen Hesham Ezz El-Din | 20250706 | -- | Invert Image, Darken and Lighten Image, Crop Images, Purple Effect |
-| **4** | Haya Hany Fathy | 20250725 | -- | Add Frame, Resize Images, Blur Images, Infrared Photography |
+| # | Name | ID | Filters Implemented |
+| :-: | :--- | :-: | :--- |
+| **1** | Haneen Osama Reda | 20250206 |  Grayscale Conversion, Flip Image, Merge Images, Sunlight Filter |
+| **2** | Sara Hamada Mohamed | 20250270 |  Black & White, Rotate Image, Detect Image Edges, Old TV Effect |
+| **3** | Nermeen Hesham Ezz El-Din | 20250706 |  Invert Image, Darken and Lighten Image, Crop Images, Purple Effect |
+| **4** | Haya Hany Fathy | 20250725 |  Add Frame, Resize Images, Blur Images, Infrared Photography |
 
 ---
 
