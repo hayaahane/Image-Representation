@@ -58,6 +58,14 @@
 2. Compile and run main.cpp.
 3. Follow the on-screen menu to load an image, apply filters, and save the output.
 
+
+## How to Run (GUI Version)
+
+1. Open the ".pro" project file in Qt Creator.
+2. Ensure the MinGW C++ compiler is configured for the project.
+3. Click the 'Run' button (or press Ctrl+R) to launch the BabyPhotoshop graphical interface.
+4. Use the on-screen buttons to load an image, select from the 18 available filters via the dropdown menu, and save the result.
+
 ---
 
 ## Technologies Used
