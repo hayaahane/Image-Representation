@@ -17,7 +17,7 @@
 
 ---
 
-## Features & Filters (16 Filters)
+## Features & Filters (18 Filters)
 
 | # | Filter Name | Description |
 | :-: | :--- | :--- |
@@ -37,6 +37,8 @@
 | **14** | **Old TV Effect** | Adds scanlines and retro screen artifacts. |
 | **15** | **Purple Filter** | Applies a purple tint effect across the image. |
 | **16** | **Infrared Photography** | Simulates infrared light capture effects. |
+| **17** | **Skewing Filter** | Processing technique used to distort or skew an image. |
+| **18** | **Oil painting Filter** | Applies a stylized effect to make the image look like an oil painting. |
 
 ---
 
