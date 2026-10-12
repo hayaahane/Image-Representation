@@ -33,8 +33,8 @@
 | **10** | **Detect Image Edges** | Identifies and highlights the boundaries of objects within an image. |
 | **11** | **Crop Image** | Crops a specific region of the image based on start point and dimensions. |
 | **12** | **Blur Image** | Smooths and reduces the level of detail or sharpness in the image. |
-| **13** | **Sunlight Filter ** | Enhances the warm natural sunlight of the image. |
-| **14** | **Old TV Effect ** | Adds scanlines and retro screen artifacts. |
+| **13** | **Sunlight Filter** | Enhances the warm natural sunlight of the image. |
+| **14** | **Old TV Effect** | Adds scanlines and retro screen artifacts. |
 | **15** | **Purple Filter** | Applies a purple tint effect across the image. |
 | **16** | **Infrared Photography** | Simulates infrared light capture effects. |
 
