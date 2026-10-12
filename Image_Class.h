@@ -189,10 +189,6 @@ public:
         }
 
         imageData = stbi_load(filename.c_str(), &width, &height, &channels, STBI_rgb);
-        this->channels = 3;
-        // Mohamed Mahmoud khalifa - Class 2024-2028 - 2025-10-14
-        // Force image to load as RGB (3 channels) to fix issues with screenshots png 
-        // containing an unnecessary 4th (alpha) channel.
 
         if (imageData == nullptr) {
             std::cerr << "File Doesn't Exist" << '\n';

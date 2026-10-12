@@ -1,6 +1,3 @@
-
-
-
 /*
 Assignment 1 - Part 1
 CS213 - object oriented programming
@@ -17,6 +14,7 @@ Team Members:
 #include "Image_Class.h"
 #include <string>
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 //Filter 1: Grayscale Conversion
@@ -35,6 +33,27 @@ void GrayScale(Image&img) {
         }
     }
 }
+
+//filter 2: Black and White Filter
+void blackandwhite (Image& image) {
+    for (int x=0; x< image.width; x++)
+        for (int y=0; y< image.height; y++)
+        {
+           int a=image (x,y,0);
+           int b=image (x,y,1);
+           int c=image (x,y,2);
+           int avg= (a+b+c) /3;
+           int newvalue ;
+           if (avg>127)
+              newvalue=255;
+           else
+              newvalue=0;
+           image.setPixel (x, y, 0, newvalue);
+           image.setPixel (x, y, 1, newvalue);
+           image.setPixel (x, y, 2, newvalue);
+        }
+}
+
 
 // Filter 3: Invert Colors Filter
 void invertImage(Image& img) {
@@ -77,6 +96,7 @@ void addFrame(Image&img, int frameType, int frameColor) {
     }
     cout << "Frame added." << endl;
 }
+ 
 //Filter 5: Flip Image
 void  HorizontalFlip (Image&img) {
     for(int i=0 ; i < img.width/2 ; i++){
@@ -93,9 +113,7 @@ void  HorizontalFlip (Image&img) {
     }
 
 }
-
-
-void VerticalFlip(Image&img){
+ void VerticalFlip(Image&img){
     for(int i=0 ; i < img.width ; i++){
         for(int j=0 ; j < img.height/2 ; j++){
             for(int k=0 ; k < 3 ; k++){
@@ -103,11 +121,47 @@ void VerticalFlip(Image&img){
                 img(i,j,k)= img(i,img.height-j-1,k);
                 img(i,img.height-j-1,k)= temp;
             }
+
         }
     }
 }
 
 
+//Filter 6: Rotate Image
+void rotateimage (Image &image ,int angle){
+    int w=image.width;
+    int h=image.height;
+    Image newimage(h,w);
+    if (angle==90 || angle==270){
+        newimage=Image(h,w);
+    }
+    else if (angle==180){
+        newimage=Image(w,h);
+    }
+    for(int x=0; x<w; x++){
+        for(int y=0;y<h; y++){
+            int newx,newy;
+            if(angle==90){
+                newx=h-y-1;
+                newy=x;
+            }
+                else if(angle==270){
+                    newx=y;
+                    newy=w-x-1;
+                }
+                    else if(angle==180){
+                        newx=w-1-x;
+                        newy=h-1-y;
+                    }
+                for(int c=0; c<3; c++){
+                   newimage.setPixel(newx,newy,c,image(x,y,c)); 
+                }        
+            }
+        }
+        image=newimage;
+}
+
+    
 // Filter 7 (Part A): Lighten Image Filter
 void lightenImage(Image& img) {
     for (int i = 0; i < img.width; ++i) {
@@ -207,6 +261,44 @@ Image  Merge(Image&img1 , Image&img2  , int mergeMethod){
     }
 }
 
+//filter 10: Edge Detection Filter
+void detectedges (Image &image ) {
+    for (int x=0; x< image.width; x++)
+        for (int y=0; y< image.height; y++)
+        {
+           int a=image (x,y,0);
+           int b=image (x,y,1);
+           int c=image (x,y,2);
+           int avg= (a+b+c) /3;
+           int newvalue ;
+           if (avg>127)
+              newvalue=255;
+           else
+              newvalue=0;
+           image.setPixel (x, y, 0, newvalue);
+           image.setPixel (x, y, 1, newvalue);
+           image.setPixel (x, y, 2, newvalue);
+        }
+        for (int x=0; x<image.width-1; x++){
+          for(int y=0; y<image.height-1; y++){
+            int diff= abs(image(x,y,0)-image(x+1,y,0));
+            if (diff>50){
+                image.setPixel(x,y,0,0);
+                image.setPixel(x,y,1,0);
+                image.setPixel(x,y,2,0);}
+                else{
+                    image.setPixel(x,y,0,255);
+                    image.setPixel(x,y,1,255);
+                    image.setPixel(x,y,2,255);
+                }
+                
+                
+
+        
+            }
+        }   
+}
+
 
 // Filter 11: Crop Image Filter
 void cropimage(Image& image, int x, int y, int width, int height) {
@@ -257,6 +349,24 @@ void wanoSunlight(Image&img){
     }
 }
 
+// Filter 14: Wano TV Filter
+void wanoTV (Image&image){
+    for (int x=0; x<image.width; x++){
+        for(int y=0; y<image.height; y++){
+            if(y%4==0){
+                int a=image(x,y,0);
+                int b=image(x,y,1);
+                int c=image(x,y,2);
+                image.setPixel(x,y,0,a/2);
+                image.setPixel(x,y,1,b/2);
+                image.setPixel(x,y,2,c/2);
+
+            }
+        }
+    }
+}
+
+
 
 // Filter 15: Purple Tint Filter
 void purplefilter(Image& image) {
@@ -281,6 +391,78 @@ void infraredImage(Image& img){
     }
 }
 
+// Filter 17: Skew Image Filter
+void skweImage (Image&image, float skewfactor){
+    double red = skewfactor*3.14/180;
+    double step = tan(red);
+    int newwidth = image.width + (image.height * step);
+    Image newimage(newwidth, image.height);
+    for (int x = 0; x < newimage.width; x++) {
+        for (int y = 0; y < newimage.height; y++) {
+            newimage.setPixel(x, y, 0, 255);
+            newimage.setPixel(x, y, 1, 255);
+            newimage.setPixel(x, y, 2, 255);
+        }
+    }
+    for (int x = 0; x < image.width; x++) {
+        for (int y = 0; y < image.height; y++) {
+            int newx = x + (y * step);
+            if (newx >= 0 && newx < newimage.width) {
+                for (int c = 0; c < 3; c++) {
+                    newimage.setPixel(newx, y, c, image(x, y, c));
+                }
+            }
+        }
+    }
+    image = newimage;
+}
+
+// Filter 18: Oil Painting Filter
+void oilPainting (Image&image){
+    int radius=5;
+    int levels=15;
+    Image newimage(image.width,image.height);
+    for (int x=0; x<image.width; x++){
+        for(int y=0; y<image.height; y++){
+            int intensityCount[15]={0};
+            int sumR[15]={0};
+            int sumG[15]={0};
+            int sumB[15]={0};
+            for(int a=-radius; a<=radius; a++){
+                for(int b=-radius; b<=radius; b++){
+                    int newX=x+a;
+                    int newY=y+b;
+                    if(newX>=0 && newX<image.width && newY>=0 && newY<image.height){
+                        int r=image(newX,newY,0);
+                        int g=image(newX,newY,1);
+                        int bl=image(newX,newY,2);
+                        int intensity=(r+g+bl)/3;
+                        int index=intensity*levels/256;
+                        if(index>14) index=14;
+                        intensityCount[index]++;
+                        sumR[index]+=r;
+                        sumG[index]+=g;
+                        sumB[index]+=bl;
+                    }
+                }
+            }
+                        int maxindex=0;
+                        int maxcount=0;
+                        for(int i=0; i<levels; i++){
+                            if(intensityCount[i]>maxcount){
+                                maxcount=intensityCount[i];
+                                maxindex=i;
+                            }
+                        }
+                                newimage.setPixel(x,y,0,sumR[maxindex]/maxcount);
+                                newimage.setPixel(x,y,1,sumG[maxindex]/maxcount);
+                                newimage.setPixel(x,y,2,sumB[maxindex]/maxcount);
+                            }
+                        }
+                        image=newimage;
+                    }
+                    
+
 
 int main() {
     string filename;
@@ -301,17 +483,23 @@ int main() {
         
         cout << "\n---------------- Main Menu ----------------" << endl;
         cout << "1. Grayscale Conversion" << endl;
+        cout << "2. Black and White Filter" << endl;
         cout << "3. Invert Colors" << endl;
         cout << "4. Add Frame" << endl;
         cout << "5. Flip Image" << endl;
+        cout << "6. Rotate Image" << endl;
         cout << "7. Darken / Lighten " << endl;
         cout << "8. Resize Image" << endl;
         cout << "9. Merge Image" << endl;
+        cout << "10. Edge Detection" << endl;
         cout << "11. Crop Image" << endl;
         cout << "12. Blur Image" << endl;
         cout << "13. Wano Sunlight" << endl; 
+        cout << "14. Wano TV" << endl;
         cout << "15. Purple Tint" << endl;
         cout << "16. Infrared Image" << endl;
+        cout << "17. Skew Image" << endl;
+        cout << "18. Oil Painting" << endl;
         cout << "19. Save the current image" << endl;
         cout << "20. Exit" << endl;
         cout << "Choose an option:   ";
@@ -322,6 +510,13 @@ int main() {
             {
                 GrayScale(currentImage); 
                 cout << "GrayScale applied successfully!" << endl;
+                break;
+            }
+
+            case 2:
+            blackandwhite(image);{
+            image.saveImage("blackandwhite_"+imagename);
+                cout<< "done! BAW FILTER."<<endl;
                 break;
             }
 
@@ -368,6 +563,16 @@ int main() {
                 } 
                 break; 
             }
+
+             case 6:{
+                int angle;
+                 cout<< "Enter rotation angle (90, 180, 270): ";
+                 cin>> angle;
+                rotateimage(image,angle);
+                image.saveImage("rotated_" + imagename);
+                cout<< "done! imagerotate."<<endl;
+                break;
+                }
 
             case 7 : {
                
@@ -448,6 +653,12 @@ int main() {
                 break; 
             }
 
+            case 10:{
+                detectedges(image);
+                image.saveImage("detectedges_" + imagename);
+                cout<< "done! detectedges."<<endl;
+                break;
+            }
 
             case 11: {
                 int x, y, width, height;
@@ -495,6 +706,13 @@ int main() {
                 break; 
             }
 
+            case 14:{
+                   wanoTV(image);
+                   image.saveImage("wanoTV_" + imagename);
+                   cout<< "done! wanoTV."<<endl;
+                   break;
+            }
+
             case 15: {
 
                 purplefilter(currentImage);
@@ -507,6 +725,24 @@ int main() {
                 cout << "Infrared filter applied successfully!" << endl;
                 break;
             }
+
+            case 17:{
+                    float angle;
+                    cout<< "Enter skew angle: ";
+                    cin>> angle;
+                    skweImage(image,angle);
+                    image.saveImage("skewed_" + imagename);
+                    cout<< "done! skweImage."<<endl;
+                    break;
+                }
+
+                case 18:{
+                    oilPainting(image);
+                    image.saveImage("oilpainting_" + imagename);
+                    cout<< "done! oilpainting."<<endl;
+                    break;
+                }
+
 
             case 19: {
             string outputName;
