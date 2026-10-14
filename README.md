@@ -17,6 +17,12 @@
 
 ---
 
+## Important Links
+1. Shared Docs: https://docs.google.com/document/d/1YBJcn-fhLf7RmhE-AonbDCpDI8nlfPdmhqVBw0vdjp4/edit?usp=sharing
+2. Project video: https://youtu.be/7i6GT0BoAng
+
+---
+
 ## Features & Filters (18 Filters)
 
 | # | Filter Name | Description |
